@@ -1,56 +1,55 @@
-
-// класс - абстракция "Телевизор"
+//
+// N. Bogdanov 2021
+// class - abstraction "TV"
+//
 class Television {
     var firmAndModel: (String, String)
     var isSwitchedOn: Bool
     var currentChannel: Channel
     
-    // метод, показывающий текущий канал
-    func showCurrentChannel(from TV: Television) {
-        if TV.isSwitchedOn {
-            print("Вы смотрите канал: \(TV.currentChannel.rawValue)")
-        } else {
-            print("Телевизор выключен")
-        }
-    }
-    
-    // конструктор класса
     init(firmAndModel: (String, String), isSwitchedOn: Bool, currentChannel: Channel) {
         self.firmAndModel = firmAndModel
         self.isSwitchedOn = isSwitchedOn
         self.currentChannel = currentChannel
     }
+    
+    // method showing the current channel
+    func showCurrentChannel(from TV: Television) {
+        if TV.isSwitchedOn {
+            print("You are watching the channel: \(TV.currentChannel.rawValue)")
+        } else {
+            print("TV off")
+        }
+    }
 }
 
-// перечисление из каналов строкового типа
+// enumeration from channels of string type
 enum Channel: String {
-    case first = "Первый"
-    case second = "Россия24"
-    case third = "НТВ"
-    case fourth = "Домашний"
-    case fifth = "Дождь"
+    case first = "First"
+    case second = "Russia24"
+    case third = "NTV"
+    case fourth = "Home"
+    case fifth = "TVRain"
     case sixth = "MTV"
 }
 
-// новый экземпляр класса и вызываем метод по показу текущего канала
+// a new instance of the class and call the method to show the current channel
 var myTV = Television(firmAndModel: ("Sony", "Bravia"), isSwitchedOn: true, currentChannel: Channel.fifth)
 myTV.showCurrentChannel(from: myTV)
 
-// "состояние" экземпляра меняется - телевизор выключили
+// the "state" of the instance changes - the TV is turned off
 myTV = Television(firmAndModel: ("Sony", "Bravia"), isSwitchedOn: false, currentChannel: Channel.second)
 myTV.showCurrentChannel(from: myTV)
 
-// новый класс - наследник предыдущего
 class ModernTV: Television {
     var volume: Volume
     var colour: Colour
     
-    // родительский метод изменен
     func showCurrentChannel(from TV: ModernTV) {
         if TV.isSwitchedOn {
-            print("Вы смотрите канал: \(TV.currentChannel.rawValue). \(TV.colour.rawValue) \(TV.volume.rawValue)")
+            print("You are watching the channel: \(TV.currentChannel.rawValue). \(TV.colour.rawValue) \(TV.volume.rawValue)")
         } else {
-            print("Телевизор выключен")
+            print("TV is off")
         }
     }
     
@@ -61,39 +60,39 @@ class ModernTV: Television {
     }
 }
 
-// перечисление с "настройками громкости" телевизора
+// enumeration with the "volume settings" of the TV
 enum Volume: String {
-    case soundOff = "Звук выключен."
-    case soundOn = "Звук включен."
+    case soundOff = "The sound is turned off."
+    case soundOn = "The sound is on."
 }
 
-// перечисление с "настройки цветности картинки на экране"
+// enumeration with "setting the color of the picture on the screen"
 enum Colour: String {
-    case blackAndWhite = "Картинка Ч/Б."
-    case color = "Картинка цветная."
+    case blackAndWhite = "B / W picture."
+    case color = "Color picture."
 }
 
-//создаем экземпляр нового класса ModernTV и вызываем метод вывода сообщения на экран
+// create an instance of the new ModernTV class and call the method to display the message on the screen
 var myModernTV = ModernTV(firmAndModel: ("Apple", "TV"), isSwitchedOn: true, currentChannel: Channel.first, volume: .soundOff, colour: .blackAndWhite)
 myModernTV.showCurrentChannel(from: myModernTV)
 
-// новый класс - наследник предыдущих классов
+// the new class is the inheritor of the previous classes
 class SuperModernTV: ModernTV {
     var signalSource: SignalSource
     
-    // обновили метод - добавили информацию об источнике видеосигнала
+    // updated the method - added information about the video source
     func showCurrentChannel(from TV: SuperModernTV) {
         let currentSignalSource = TV.signalSource
         if TV.isSwitchedOn {
             switch currentSignalSource {
             case .tv(let value):
-                print("В данный момент вы используете \(value)")
-                print("Вы смотрите канал: \(TV.currentChannel.rawValue). \(TV.colour.rawValue) \(TV.volume.rawValue)")
+                print("You are currently using \(value)")
+                print("You are watching the channel: \(TV.currentChannel.rawValue). \(TV.colour.rawValue) \(TV.volume.rawValue)")
             case .video(let value):
-                print("В данный момент вы используете \(value)")
+                print("You are currently using \(value)")
             }
         } else {
-            print("Телевизор выключен")
+            print("TV off")
         }
     }
     
@@ -103,11 +102,11 @@ class SuperModernTV: ModernTV {
     }
 }
 
-// перечисление с associated values (переключение "ТВ" - "видеомагнитофон")
+// enumeration with associated values ​​(toggle "TV" - "VCR")
 enum SignalSource {
     case tv(String)
     case video(String)
 }
 
-var mySuperModenTV = SuperModernTV(firmAndModel: ("Apple", "New Apple TV"), isSwitchedOn: true, currentChannel: Channel.fourth, volume: .soundOn, colour: .color, signalSource: .video("видеомагнитофон"))
+var mySuperModenTV = SuperModernTV(firmAndModel: ("Apple", "New Apple TV"), isSwitchedOn: true, currentChannel: Channel.fourth, volume: .soundOn, colour: .color, signalSource: .video("VCR"))
 mySuperModenTV.showCurrentChannel(from: mySuperModenTV)
